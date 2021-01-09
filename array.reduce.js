@@ -20,7 +20,48 @@ console.log(`result with initialValue: ${result}`); // 20
 //------------
 Object.defineProperty(Array.prototype, 'reduce', {
   value: function(callback) {
-    console.log('self defined Array.reduce function');
+    console.log('self-defined Array.prototype.reduce function');
+
+    if (this == null) {
+      throw new TypeError('Array.prototype.reduce called on null or undefined');
+    }
+
+    if (typeof callback !== 'function') {
+      throw new TypeError(callback + ' is not a function');
+    }
+
+    let value, k = 0;
+
+    let Obj = Object(this);
+    let len = Obj.length >>> 0;
+
+    // Assign initialValue to value if any
+    // Cast error if we have both empty array and no initialValue 
+    if (arguments.length >= 2) {
+      value = arguments[1]; // initialValue
+    } else {
+      // TODO: check this part of logic
+      while (k < len && !(k in Obj)) {
+        k++;
+      }
+
+      if (k >= len) {
+        throw new TypeError('Reduce of empty array with no initial value');
+      }
+
+      value = Obj[k++];
+    }
+
+    // Repeat, while k < len
+    while (k < len) {
+      if (k in Obj) {
+        value = callback.call(null, value, Obj[k], k, Obj);
+      }
+
+      k++;
+    }
+
+    return value;
   }
 });
 
