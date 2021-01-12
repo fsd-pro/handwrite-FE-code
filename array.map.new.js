@@ -1,8 +1,6 @@
 'use strict';
 
 Array.prototype.map = function(callback) {
-  let retArr, i;
-
   if (this == null) {
     throw new TypeError('this is null or not defined');
   }
@@ -10,6 +8,8 @@ Array.prototype.map = function(callback) {
   if (typeof callback !== 'function') {
     throw new TypeError(callback + ' is not a function');
   }
+
+  let retArr, i;
 
   // let array be object, this refers to the input array
   let Obj = Object(this);
